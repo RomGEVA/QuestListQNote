@@ -24,7 +24,9 @@ struct SettingsView: View {
                     }
                     
                     Button(action: {
-                        showingPrivacyPolicy = true
+                        if let url = URL(string: "https://www.termsfeed.com/live/acda9bab-8c75-45cf-854b-883fa37a466d") {
+                            UIApplication.shared.open(url)
+                        }
                     }) {
                         HStack {
                             Image(systemName: "doc.text.fill")
