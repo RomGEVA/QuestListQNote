@@ -2,12 +2,14 @@ import SwiftUI
 import CoreData
 
 struct OnboardingView: View {
-    @Environment(\.managedObjectContext) private var viewContext
+    
+    private let persistenceController = PersistenceController.shared
     @StateObject private var userViewModel: UserViewModel
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     
     @State private var selectedAvatar = "avatar1"
     @State private var nickname = ""
+    @State private var isOpenMainView = false
     
     let avatars = ["avatar1", "avatar2", "avatar3", "avatar4"]
     
@@ -78,12 +80,16 @@ struct OnboardingView: View {
                 .padding(.horizontal)
             }
             .padding()
+            .fullScreenCover(isPresented: $isOpenMainView) {
+                ContentView(context: self.persistenceController.container.viewContext)
+            }
         }
     }
     
     private func completeOnboarding() {
         userViewModel.createUser(name: nickname, avatar: selectedAvatar)
         hasCompletedOnboarding = true
+        isOpenMainView = true
     }
 }
 

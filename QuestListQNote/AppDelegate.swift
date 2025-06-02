@@ -6,16 +6,49 @@
 //
 
 import UIKit
+import SwiftUI
+import OneSignalFramework
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
-
+    
+    
+    
+    var window: UIWindow?
+    var restrictRotation: UIInterfaceOrientationMask = .all
+    private let oneSignalIDCheker = OneSignalIDChecker()
+    let persistenceController = PersistenceController.shared
+    
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        
+        return restrictRotation
+    }
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        OneSignal.initialize("0c14d3e3-0aac-46b1-81bf-ab9007d99f4d", withLaunchOptions: nil)
+        oneSignalIDCheker.startCheckingOneSignalID()
+       // initViewControllers()
         return true
     }
+    
+//    private func initViewControllers() {
+//        let controller: UIViewController
+//        if let lastUrl = SaveService.lastUrl {
+//            controller = WebviewVC(url: lastUrl)
+//            window = UIWindow(frame: UIScreen.main.bounds)
+//            window?.rootViewController = controller
+//            window?.makeKeyAndVisible()
+//            print("saved")
+//        } else {
+//            let context = persistenceController.container.viewContext
+//            let contentView = ContentView(context: context)
+//            controller = UIHostingController(rootView: contentView)
+//            window = UIWindow(frame: UIScreen.main.bounds)
+//            window?.rootViewController = controller
+//            window?.makeKeyAndVisible()
+//            print("not saved")
+//        }
+//    }
 
     // MARK: UISceneSession Lifecycle
 

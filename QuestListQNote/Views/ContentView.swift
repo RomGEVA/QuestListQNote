@@ -91,6 +91,7 @@ struct ContentView: View {
             }
             .tag(3)
         }
+        .animation(.bouncy, value: selectedTab)
         .environment(\.managedObjectContext, viewContext)
     }
 }

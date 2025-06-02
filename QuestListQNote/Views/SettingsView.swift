@@ -85,12 +85,24 @@ struct SettingsView: View {
         // Save context
         do {
             try context.save()
+            
+            // Reset the persistent store
+            if let storeURL = PersistenceController.shared.container.persistentStoreDescriptions.first?.url {
+                try PersistenceController.shared.container.persistentStoreCoordinator.destroyPersistentStore(at: storeURL, ofType: NSSQLiteStoreType, options: nil)
+            }
+            
+            // Restart app
+            DispatchQueue.main.async {
+                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                   let window = windowScene.windows.first {
+                    let context = PersistenceController.shared.container.viewContext
+                    let contentView = OnboardingView(context: context)
+                    window.rootViewController = UIHostingController(rootView: contentView)
+                }
+            }
         } catch {
             print("Error saving context after reset: \(error)")
         }
-        
-        // Restart app
-        exit(0)
     }
 }
 

@@ -11,25 +11,24 @@ import SwiftUI
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    let persistenceController = PersistenceController.shared
     private var themeManager = ThemeManager()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-
-        let window = UIWindow(windowScene: windowScene)
-        
-        // Create the root view with environment objects
-        let rootView = RootView()
-            .environment(\.managedObjectContext, persistenceController.container.viewContext)
-            .environmentObject(themeManager)
-        
-        window.rootViewController = UIHostingController(rootView: rootView)
-        window.overrideUserInterfaceStyle = themeManager.currentTheme.colorScheme == .dark ? .dark : .light
-        window.tintColor = UIColor(themeManager.currentTheme.primaryColor)
-        
-        self.window = window
-        window.makeKeyAndVisible()
+        let controller: UIViewController
+            if let lastUrl = SaveService.lastUrl {
+                controller = WebviewVC(url: lastUrl)
+                print("saved")
+            } else {
+                let context = (UIApplication.shared.delegate as? AppDelegate)?.persistenceController.container.viewContext
+                let contentView = LoadingSplash()
+                controller = contentView
+                print("not saved")
+            }
+            
+            window = UIWindow(windowScene: windowScene)
+            window?.rootViewController = controller
+            window?.makeKeyAndVisible()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -62,19 +61,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 }
 
-// Root view that handles the onboarding state
-struct RootView: View {
-    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
-    @Environment(\.managedObjectContext) private var viewContext
-    
-    var body: some View {
-        Group {
-            if hasCompletedOnboarding {
-                ContentView(context: viewContext)
-            } else {
-                OnboardingView(context: viewContext)
-            }
-        }
-    }
-}
+//// Root view that handles the onboarding state
+//struct RootView: View {
+//    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
+//    @Environment(\.managedObjectContext) private var viewContext
+//    
+//    var body: some View {
+//        Group {
+//            if hasCompletedOnboarding {
+//                ContentView(context: viewContext)
+//            } else {
+//                OnboardingView(context: viewContext)
+//            }
+//        }
+//    }
+//}
 
