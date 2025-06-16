@@ -27,28 +27,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         OneSignal.initialize("0c14d3e3-0aac-46b1-81bf-ab9007d99f4d", withLaunchOptions: nil)
         oneSignalIDCheker.startCheckingOneSignalID()
-       // initViewControllers()
         return true
     }
     
-//    private func initViewControllers() {
-//        let controller: UIViewController
-//        if let lastUrl = SaveService.lastUrl {
-//            controller = WebviewVC(url: lastUrl)
-//            window = UIWindow(frame: UIScreen.main.bounds)
-//            window?.rootViewController = controller
-//            window?.makeKeyAndVisible()
-//            print("saved")
-//        } else {
-//            let context = persistenceController.container.viewContext
-//            let contentView = ContentView(context: context)
-//            controller = UIHostingController(rootView: contentView)
-//            window = UIWindow(frame: UIScreen.main.bounds)
-//            window?.rootViewController = controller
-//            window?.makeKeyAndVisible()
-//            print("not saved")
-//        }
-//    }
 
     // MARK: UISceneSession Lifecycle
 
